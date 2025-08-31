@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  passwordHash String
+  phone        String?  @unique
+  mustResetPwd Boolean  @default(true)
+  role         Role     @default(STUDENT)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  todos        Todo[]
+}
+
+model Stage {
+  id        Int       @id @default(1)
+  name      String
+  code      String    @unique
+  startAt   DateTime?
+  endAt     DateTime?
+  isActive  Boolean   @default(true)
+  updatedAt DateTime  @updatedAt
+}
+
+model Todo {
+  id        String   @id @default(cuid())
+  userId    String
+  title     String
+  done      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  EDU_SECRETARY
+  COMPANY_MGR
+  STUDENT
+  LEAD_TEACHER
+  COMPANY_MENTOR
+  EXPERT
+}

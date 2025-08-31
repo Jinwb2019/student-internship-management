@@ -1,0 +1,10 @@
+# Node
+node_modules/
+npm-debug.log
+.env
+
+# Frontend build
+frontend/build/
+
+# Prisma
+backend/prisma/generated/
